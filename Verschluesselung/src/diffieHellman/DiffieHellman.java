@@ -45,15 +45,28 @@ public class DiffieHellman {
 		while(!br.readLine().equals("ready")){
 			//XXX Staff to sync, fix if it causes Problems!
 		}
-		//TODO Check Properties
-		BigInteger prime = BigInteger.valueOf(Integer.parseInt(p.getProperty(DiffieHellman.prime)));
+	    //Properties testing
+		try{
+
+			int min =Integer.parseInt(p.getProperty(DiffieHellman.min));
+			int prime = Integer.parseInt(p.getProperty(DiffieHellman.prime));
+			long l =Long.parseLong(p.getProperty(DiffieHellman.root));
+			
+		}catch(NumberFormatException e){
+			p = new Properties();
+			//TODO Check values
+			p.put(DiffieHellman.min, 1000000000);
+			p.put(DiffieHellman.prime, 489133282872437279l);
+			p.put(DiffieHellman.root, 13);
+		}
+		BigInteger prime = BigInteger.valueOf(Long.parseLong(p.getProperty(DiffieHellman.prime)));
 		BigInteger g = primitveRoot(p);
-		BigInteger a = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Integer.parseInt(p.getProperty(DiffieHellman.min))));
+		BigInteger a = BigInteger.valueOf((long) (Math.random()*Math.pow(10, 10)+Long.parseLong(p.getProperty(DiffieHellman.min))));
 		BigInteger A = calcA(g, a, prime);
 		pw.println(prime+" "+g+" "+A);
 		while(!br.ready());
 		String one = br.readLine();
-		BigInteger B =  BigInteger.valueOf(Integer.parseInt(one));
+		BigInteger B =  BigInteger.valueOf(Long.parseLong(one));
 		
 		return calcK(B, a, prime);
 	}
@@ -81,14 +94,14 @@ public class DiffieHellman {
 		pw.print("ready\n");
 		while(!br.ready());
 		String[] one = br.readLine().split("\\s++");
-		BigInteger prime = BigInteger.valueOf(Integer.parseInt(one[0]));
-		BigInteger g = BigInteger.valueOf(Integer.parseInt(one[1]));
-		BigInteger A = BigInteger.valueOf(Integer.parseInt(one[2]));BigInteger a = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Integer.parseInt(p.getProperty(DiffieHellman.min))));
-		BigInteger b = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Integer.parseInt(p.getProperty(DiffieHellman.min))));
+		BigInteger prime = BigInteger.valueOf(Long.parseLong(one[0]));
+		BigInteger g = BigInteger.valueOf(Long.parseLong(one[1]));
+		BigInteger A = BigInteger.valueOf(Long.parseLong(one[2]));
+		BigInteger b = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Long.parseLong(p.getProperty(DiffieHellman.min))));
 		BigInteger B = calcA(g, b, prime);
 		pw.println(B+"");
 		
-		return calcK(a, B, prime);
+		return calcK(b, A, prime);
 	}
 	/**
 	 * 
@@ -115,10 +128,12 @@ public class DiffieHellman {
 	 * @version 26.02.2014
 	 */
 	private static BigInteger calcA (BigInteger g, BigInteger a, BigInteger prime){
-		return BigInteger.valueOf(((g.pow(a.intValue()).intValue())%prime.intValue()));
+		return BigInteger.valueOf(((g.pow(a.intValue()).longValue())%prime.longValue()));
 	}
 	
 	private static byte[] calcK (BigInteger A, BigInteger b, BigInteger prime){
-		return ((A.pow(b.intValue()).intValue()%prime.intValue())+"").getBytes();
+		return ((A.pow(b.intValue()).longValue()%prime.longValue())+"").getBytes();
 	}
+	
+	
 }
