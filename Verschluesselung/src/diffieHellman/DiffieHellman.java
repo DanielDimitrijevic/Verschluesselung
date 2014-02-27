@@ -20,6 +20,8 @@ public class DiffieHellman {
 
 	/**Key for the Properties of the used shared Prime*/
 	private static final String prime ="dh.p";
+	/**Key for the Properties for the corresponding Primitiveroot to the Prime*/
+	private static final String root = "dh.g";
 	/**Key for the Properties of the used minimum value*/
 	private static final String min ="dh.min";
 	
@@ -45,7 +47,7 @@ public class DiffieHellman {
 		}
 		//TODO Check Properties
 		BigInteger prime = BigInteger.valueOf(Integer.parseInt(p.getProperty(DiffieHellman.prime)));
-		BigInteger g = primitveRoot(prime);
+		BigInteger g = primitveRoot(p);
 		BigInteger a = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Integer.parseInt(p.getProperty(DiffieHellman.min))));
 		BigInteger A = calcA(g, a, prime);
 		pw.println(prime+" "+g+" "+A);
@@ -64,6 +66,7 @@ public class DiffieHellman {
 	 * @param p Properties for the Encryption (should be  ident on both ends)
 	 * @return genereated key
 	 * @throws IOException
+	 * @throws NumberFormatException
 	 *
 	 * @author Thomas Traxler
 	 * @version 26.02.2014
@@ -95,9 +98,10 @@ public class DiffieHellman {
 	 *
 	 * @author Thomas Traxler
 	 * @version 26.02.2014
+	 * @throws NumberFormatException
 	 */
-	private static BigInteger primitveRoot (BigInteger prime){
-		return prime; //TODO Calculate primitive root
+	private static BigInteger primitveRoot (Properties p) throws NumberFormatException{
+		return BigInteger.valueOf(Long.parseLong(p.getProperty(DiffieHellman.root))); 
 	}
 	/**
 	 * 
