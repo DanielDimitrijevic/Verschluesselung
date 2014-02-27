@@ -10,7 +10,9 @@ import java.util.List;
       
 
 
+
     import org.jnetpcap.Pcap;  
+import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapIf;  
 import org.jnetpcap.packet.PcapPacket;  
 import org.jnetpcap.packet.PcapPacketHandler;  
@@ -80,10 +82,23 @@ import org.jnetpcap.protocol.tcpip.Tcp;
              **************************************************************************/  
             int snaplen = 64 * 1024;           // Capture all packets, no trucation  
             int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-            int timeout = 10 * 1000;           // 10 seconds in millis  
+            int timeout = 10 * 1000;
+            // 10 seconds in millis  
             Pcap pcap =  
                 Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);  
-      
+          
+        	PcapBpfProgram program = new PcapBpfProgram();
+//        	String expression = "tcp";//"host 10.0.104.196";
+//        	int optimize = 0; // 0 = false
+//        	int netmask = 0xFFFFFF00; // 255.255.255.0
+//        	if (pcap.compile(program, expression, optimize, netmask) != Pcap.OK) {
+//        	System.err.println(pcap.getErr());
+//        	return;
+//        	}
+//        	if (pcap.setFilter(program) != Pcap.OK) {
+//        	System.err.println(pcap.getErr());
+//        	return;	
+//        	} 
             if (pcap == null) {  
                 System.err.printf("Error while opening device for capture: "  
                     + errbuf.toString());  
@@ -98,6 +113,7 @@ import org.jnetpcap.protocol.tcpip.Tcp;
       
                 public void nextPacket(PcapPacket packet, String user) {  
                 	Tcp a = new Tcp();
+                	
                     System.out.printf("Received packet at %s caplen=%-4d len=%-4d %s\n",  
                         new Date(packet.getCaptureHeader().timestampInMillis()),   
                         packet.getCaptureHeader().caplen(),  // Length actually captured  
@@ -109,6 +125,7 @@ import org.jnetpcap.protocol.tcpip.Tcp;
                     	byte[] payloadContent = a.getByteArray(0, a.size()); // offset, length
                     	String strPayloadContent = new String(payloadContent);
                     	System.out.println("payload content = [" + strPayloadContent + "]");
+                    	System.out.println(a.toHexdump());
                     	}
                 }  
             };  
