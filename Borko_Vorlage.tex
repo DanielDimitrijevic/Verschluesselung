@@ -1,0 +1,45 @@
+\documentclass[a4paper,12pt]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+\usepackage{tabu}
+\usepackage{graphicx}
+\usepackage{lmodern}
+
+\begin{document}
+
+
+%\titlehead{Kopf} %Optionale Kopfzeile
+\author{Daniel Dimtrijevic \and Thomas Traxler} %Zwei Autoren
+\title{ Verschl"usselung } %Titel/Thema
+\subject{VSDB} %Fach
+\subtitle{ DES \\ Diffie-Hellman } %Genaueres Thema, Optional
+\date{\today} %Datum
+\publishers{5AHITT} %Klasse
+
+\maketitle
+\tableofcontents
+
+
+\chapter{Aufgabenstellung}
+	
+\chapter{Designüberlegungen}
+	
+\chapter{Arbeitsaufteilung}
+	\tabulinesep = 4pt
+	\begin{tabu}  {|[2pt]X[2.5,c] |[1pt] X[4,c] |[1pt]X[1.3,c]|[1pt]X[c]|[2pt]}
+		\tabucline[2pt]{-}
+		Name & Arbeitssegment & Time Estimated & Time Spent\\\tabucline[2pt]{-}
+		
+		Walter Klaus & Chat & 5h & 10h\\\tabucline[1pt]{-}
+		Walter Klaus & En-/Decrypt & 5h & 10h\\\tabucline[1pt]{-}
+		Walter Klaus & Diffie-Hellman & 5h & 10h\\\tabucline[1pt]{-}
+		Walter Klaus & Sniffing & 5h & 10h\\\tabucline[2pt]{-}
+		Gesamt && 105h & 15h\\\tabucline[2pt]{-}
+	\end{tabu}	
+\chapter{Arbeitsdurchführung}
+\chapter{Testbericht}
+\chapter{Quellen}
+
+\end{document}
