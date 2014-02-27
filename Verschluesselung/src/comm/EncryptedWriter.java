@@ -17,12 +17,12 @@ import javax.crypto.spec.SecretKeySpec;
 public class EncryptedWriter extends BufferedWriter {
 
 	private byte[] key;
-	public EncryptedWriter(Writer arg0) {
+	public EncryptedWriter(Writer arg0, byte[]key) {
 		super(arg0);
 		this.key=key;//TODO Check key?
 	}
 
-	public EncryptedWriter(Writer arg0, int arg1) {
+	public EncryptedWriter(Writer arg0, int arg1, byte[] key) {
 		super(arg0, arg1);
 		this.key=key;
 	}
@@ -42,9 +42,10 @@ public class EncryptedWriter extends BufferedWriter {
 		SecretKeySpec keySpec = new SecretKeySpec (desKeySpec.getKey(),"DES");
 		Cipher cipher;
 		try {
-			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+//			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+			cipher = Cipher.getInstance("DES");
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-			String write = new String(cipher.doFinal(line.getBytes()));
+			String write = new sun.misc.BASE64Encoder().encode((cipher.doFinal(line.getBytes())));
 			super.write(write);
 			super.newLine();
 			super.flush();

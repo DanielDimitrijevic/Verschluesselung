@@ -19,11 +19,11 @@ import java.util.Properties;
 public class DiffieHellman {
 
 	/**Key for the Properties of the used shared Prime*/
-	private static final String prime ="dh.p";
+	public static final String prime ="dh.p";
 	/**Key for the Properties for the corresponding Primitiveroot to the Prime*/
-	private static final String root = "dh.g";
+	public static final String root = "dh.g";
 	/**Key for the Properties of the used minimum value*/
-	private static final String min ="dh.min";
+	public static final String min ="dh.min";
 	
 	/**
 	 * 
@@ -41,10 +41,14 @@ public class DiffieHellman {
 		PrintWriter  pw = new PrintWriter(new BufferedOutputStream(s.getOutputStream()));
 		BufferedReader br = new BufferedReader(new InputStreamReader (s.getInputStream()));
 		pw.print("ready\n");
+		pw.flush();
+		String test;
+
 		while(!br.ready());
-		while(!br.readLine().equals("ready")){
+		do{
 			//XXX Staff to sync, fix if it causes Problems!
-		}
+			test = br.readLine();
+		}while(!test.equals("ready"));
 	    //Properties testing
 		try{
 
@@ -52,22 +56,21 @@ public class DiffieHellman {
 			int prime = Integer.parseInt(p.getProperty(DiffieHellman.prime));
 			long l =Long.parseLong(p.getProperty(DiffieHellman.root));
 			
-		}catch(NumberFormatException e){
+		}catch(NumberFormatException|NullPointerException e){
 			p = new Properties();
-			//TODO Check values
-			p.put(DiffieHellman.min, 1000000000);
-			p.put(DiffieHellman.prime, 489133282872437279l);
-			p.put(DiffieHellman.root, 13);
+			p.put(DiffieHellman.min, "100");
+			p.put(DiffieHellman.prime, "6972593");
+			p.put(DiffieHellman.root, "3");
 		}
-		BigInteger prime = BigInteger.valueOf(Long.parseLong(p.getProperty(DiffieHellman.prime)));
+		BigInteger prime = BigInteger.valueOf(Integer.parseInt(p.getProperty(DiffieHellman.prime)));
 		BigInteger g = primitveRoot(p);
-		BigInteger a = BigInteger.valueOf((long) (Math.random()*Math.pow(10, 10)+Long.parseLong(p.getProperty(DiffieHellman.min))));
+		BigInteger a = BigInteger.valueOf(Math.abs(((long) (Math.random()*Math.pow(10, 2)+Long.parseLong(p.getProperty(DiffieHellman.min))))));
 		BigInteger A = calcA(g, a, prime);
-		pw.println(prime+" "+g+" "+A);
+		pw.println(prime.longValue()+" "+g.longValue()+" "+A.longValue());
+		pw.flush();
 		while(!br.ready());
-		String one = br.readLine();
-		BigInteger B =  BigInteger.valueOf(Long.parseLong(one));
-		
+		test = br.readLine();
+		BigInteger B =  BigInteger.valueOf(Long.parseLong(test));
 		return calcK(B, a, prime);
 	}
 	
@@ -87,21 +90,32 @@ public class DiffieHellman {
 	public static byte[] keyGenBob (Socket s, Properties p) throws IOException, NumberFormatException{
 		PrintWriter  pw = new PrintWriter(new BufferedOutputStream(s.getOutputStream()));
 		BufferedReader br = new BufferedReader(new InputStreamReader (s.getInputStream()));
+		String test;
 		while(!br.ready());
-		while(!br.readLine().equals("ready")){
+		do{
 			//XXX Staff to sync, fix if it causes Problems!
-		}
+			test = br.readLine();
+		}while(!test.equals("ready"));
 		pw.print("ready\n");
+		pw.flush();
 		while(!br.ready());
 		String[] one = br.readLine().split("\\s++");
+		try{
+
+			int min =Integer.parseInt(p.getProperty(DiffieHellman.min));
+			
+		}catch(NumberFormatException|NullPointerException e){
+			p = new Properties();
+			p.put(DiffieHellman.min, "100");
+		}
 		BigInteger prime = BigInteger.valueOf(Long.parseLong(one[0]));
 		BigInteger g = BigInteger.valueOf(Long.parseLong(one[1]));
 		BigInteger A = BigInteger.valueOf(Long.parseLong(one[2]));
-		BigInteger b = BigInteger.valueOf((int) (Math.random()*Math.pow(10, 10)+Long.parseLong(p.getProperty(DiffieHellman.min))));
+		BigInteger b = BigInteger.valueOf(Math.abs((int) (Math.random()*Math.pow(10, 2)+Long.parseLong(p.getProperty(DiffieHellman.min)))));
 		BigInteger B = calcA(g, b, prime);
-		pw.println(B+"");
-		
-		return calcK(b, A, prime);
+		pw.println(B.longValue()+"");
+		pw.flush();
+		return calcK(A, b, prime);
 	}
 	/**
 	 * 
@@ -128,11 +142,11 @@ public class DiffieHellman {
 	 * @version 26.02.2014
 	 */
 	private static BigInteger calcA (BigInteger g, BigInteger a, BigInteger prime){
-		return BigInteger.valueOf(((g.pow(a.intValue()).longValue())%prime.longValue()));
+		return g.pow(a.intValue()).mod(prime);
 	}
 	
 	private static byte[] calcK (BigInteger A, BigInteger b, BigInteger prime){
-		return ((A.pow(b.intValue()).longValue()%prime.longValue())+"").getBytes();
+		return ((A.pow(b.intValue()).mod(prime)).longValue()+"").getBytes();
 	}
 	
 	

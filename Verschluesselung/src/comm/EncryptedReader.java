@@ -41,9 +41,11 @@ public class EncryptedReader extends BufferedReader {
 		SecretKeySpec keySpec = new SecretKeySpec (desKeySpec.getKey(),"DES");
 		Cipher cipher;
 		try {
-			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+//			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+			cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			cipher.init(Cipher.DECRYPT_MODE, keySpec);
-			return new String(cipher.doFinal(super.readLine().getBytes()));
+			String out = super.readLine();
+			return new String(cipher.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(out)));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
 			// Shpuld not be possible to reach
 			e.printStackTrace();
