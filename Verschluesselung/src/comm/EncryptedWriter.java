@@ -1,6 +1,4 @@
-package comm;
-
-import java.io.BufferedWriter;
+package comm;import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.security.InvalidKeyException;
@@ -37,7 +35,15 @@ public class EncryptedWriter extends BufferedWriter {
 	 * @throws IOException 
 	 * @throws InvalidKeyException 
 	 */
-	public void writeLineEncrypted(String line) throws IOException, InvalidKeyException{
+	public void writeLineEncrypted(String in) throws IOException, InvalidKeyException{
+		boolean more = false;
+		String line;
+		if(in.length()>40){
+			line=in.substring(0, 40);
+			more=true;
+		}else{
+			line=in;
+		}
 		DESKeySpec desKeySpec = new DESKeySpec(key);
 		SecretKeySpec keySpec = new SecretKeySpec (desKeySpec.getKey(),"DES");
 		Cipher cipher;
@@ -49,6 +55,9 @@ public class EncryptedWriter extends BufferedWriter {
 			super.write(write);
 			super.newLine();
 			super.flush();
+			if(more){
+				writeLineEncrypted(in.substring(41));
+			}
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
 			// Shpuld not be possible to reach
 			e.printStackTrace();
