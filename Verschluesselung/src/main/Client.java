@@ -144,8 +144,10 @@ public class Client extends Thread{
 		while(work){
 			System.out.println("Geben sie ein welche Text sie senden wollen");
 			text = a.readLine();
-			if(text.equals("!end"))
+			if(text.equals("!end")){
 				work=false;
+				client.end();
+			}
 			if(e){
 				try {
 					((EncryptedWriter)out).writeLineEncrypted(text);
