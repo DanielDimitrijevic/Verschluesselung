@@ -43,7 +43,7 @@ import org.jnetpcap.protocol.tcpip.Tcp;
             for (PcapIf device : alldevs) {  
                 String description =  
                     (device.getDescription() != null) ? device.getDescription()  
-                        : "No description available";  
+                        : "Keine Beschreibung vorhanden";  
                 System.out.printf("#%d: %s [%s]\n", i++, device.getName(), description);  
             }  
       
@@ -61,7 +61,7 @@ import org.jnetpcap.protocol.tcpip.Tcp;
                 Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);  
           
         	PcapBpfProgram program = new PcapBpfProgram();
-        	String expression = "host 10.0.0.1";//"host 10.0.0.1";
+        	String expression = "tcp";//"host 10.0.0.1";
         	int optimize = 0; // 0 = false
         	int netmask = 0xFFFFFF00; // 255.255.255.0
         	if (pcap.compile(program, expression, optimize, netmask) != Pcap.OK) {
@@ -91,11 +91,12 @@ import org.jnetpcap.protocol.tcpip.Tcp;
                         user                                 // User supplied object  
                         );  
                     if (packet.hasHeader(a)) {
-                    	System.out.printf("Payload length=%d\n", a.getLength());
-                    	byte[] payloadContent = a.getByteArray(0, a.size()); // offset, length
-                    	String strPayloadContent = new String(payloadContent);
-                    	System.out.println("Payload Inhalt = [" + strPayloadContent + "]");
-                    	System.out.println(a.toHexdump());
+//                    	System.out.printf("Payload length=%d\n", a.getLength());
+//                    	byte[] payloadContent = a.getByteArray(0, a.size()); // offset, length
+//                    	String strPayloadContent = new String(payloadContent);
+//                    	System.out.println("Payload Inhalt = [" + strPayloadContent + "]");
+//                    	System.out.println(a.toHexdump());
+                    	System.out.println(org.jnetpcap.packet.format.FormatUtils.hexdump(packet.getHeader(a).getPayload()));
                     	}
                 }  
             };  
