@@ -42,7 +42,7 @@ Punkte: 16
 
 	
 \chapter{Designüberlegungen}
-	
+	Die Verschl"usselung sollte im besten Fall mithilfe des Dekorator-Patterns erfolgen, da die einzige Anforderung verschl"usselte Kommunikation und kein anderes Anwendungsgebiet ist, k"onnen wir ohne jegliches schlechtes gewissen und auch hierauf einschr"anken, dies bedeutet wir erweitern schlicht BufferedReader und BufferedWriter welche bereits alle n"otigen Methoden zur Kommunikation bieten und erweitern diese lediglich um die Funktion der Verschl"usselung, die Schl"usselerstellung wird in eine eigene Klasse ausgelagert und der Sniffer bildet ein eigenes Programm f"ur sich.
 \chapter{Arbeitsaufteilung}
 	\tabulinesep = 4pt
 	\begin{tabu}  {|[2pt]X[2.5,c] |[1pt] X[4,c] |[1pt]X[1.3,c]|[1pt]X[c]|[2pt]}
@@ -63,7 +63,6 @@ Im der ersten Phase des Sniffers suche ich mir die Liste an Adaptern heraus die 
 Das hat am Anfang zu Problemen bei mir gef"uhrt da ich noch von den Vorjahren einige Loopback adapter hatte die ich erst deaktivieren musste. Nachdem ich dieses Problem gel"ost hatte ging ich die Aufgabe der Packetausgabe an. Da hatte ich f"ur die normale Ausgabe keine Problem, bis ich bemerkte das ich Limitieren musste welche Packete mitgesnifft werden m"ussen. Nach einer weile Recherche habe ich auch dieses Problem gel"ost. Danach war die Ausgabe der Packete nur noch ein kleines Problem. Es kostet mich ein wenig extra Zeit herauszufinden mit welchem Befehl ich die Payload eines Packetes ausgeben kann und es in Hexadezimal auch anzuzeigen. Danach war nur noch die Anzahl der Durchläufe einzugeben und den Sniffer zuschlie"sen. 
 \\Die Verschl"usselung erfolgt durch erweiterte Reader und Writer. Diese EncryptedReader und Writer beinhalten alle funktionen normaler Reader und Writer, die Kommunikation ist daher nicht weiter beeinflusst, zus"atzlich ben"otigen sie jedoch im Konstruktor ein Bytearray als Key und bieten die m"oglichkeit der verschl"usselten "Ubertragung mit den Methoden ReadLineEnrypted und WriteLineEncrypted, welche alle "ubergebenen bzw. auszugebenden Nachrichten DES ver- bzw. entschl"usselt, hierbei wird immer der jeweilig "ubergebene Schl"ussel verwendet. F"ur die Zukunft w"are es denkbar auch weitere Methoden des Readers und Wirters verschl"usselt zur Verf"ugung zu stellen oder aber auch die Verschl"usselungsmethode variabel zu machen. Die Verschl"usselung selbst wurde mit der Klasse javax.crypto.Cipher durchgef"uhrt welche eine leichte Umsetzung hierf"ur bietet.\\
 \\Die Schl"usselerstellung erfolgt mittels des DiffieHellmann Verfahrens, die hierzu ben"otigten Ausgangswerte k"onnen mittels eines Properties Objekts "ubergeben werden, ist dieses Leer oder unvollst"andig werden Defaultwerte verwendet. Die f"ur dieses Verfahren notwendigen und verwendeten Algorithmen sind allgemein verf"ugbar und nahezu "uberall einsehbar.
-\chapter{Testbericht}
 \chapter{Quellen}
 
 \end{document}
