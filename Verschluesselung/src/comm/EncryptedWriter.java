@@ -52,6 +52,7 @@ public class EncryptedWriter extends BufferedWriter {
 			cipher = Cipher.getInstance("DES");
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 			String write = new sun.misc.BASE64Encoder().encode((cipher.doFinal(line.getBytes())));
+			System.out.println(write);
 			super.write(write);
 			super.newLine();
 			super.flush();
